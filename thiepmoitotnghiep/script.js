@@ -595,8 +595,9 @@ window.onload = function() {
       }
       status.textContent = 'Đang gửi...';
       try {
-        // Gửi dữ liệu tới server (Node.js) qua fetch API
-        const res = await fetch('/api/message', {
+        // Gửi dữ liệu tới server (Node.js) qua fetch API với đường dẫn tuyệt đối
+        const API_URL = 'https://thiepmoitotnghiep.onrender.com/api/message';
+        const res = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, message })

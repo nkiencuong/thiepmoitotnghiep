@@ -693,7 +693,7 @@
               <td></td>
               <td>1</td>
               <td>2</td>
-              <td></td>
+              <td>3</td>
             </tr>
             <tr>
               <td>4</td>
@@ -875,78 +875,7 @@
       sections.forEach(section => observer.observe(section));
     });
 
-    // Hiệu ứng mũ tốt nghiệp bay bay
-    function drawGraduationCap(ctx, x, y, size, angle) {
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate(angle);
-      ctx.scale(size / 40, size / 40);
-      // Vẽ mũ tốt nghiệp đơn giản
-      ctx.beginPath();
-      ctx.moveTo(-20, 0);
-      ctx.lineTo(0, -10);
-      ctx.lineTo(20, 0);
-      ctx.lineTo(0, 10);
-      ctx.closePath();
-      ctx.fillStyle = '#bfa58a';
-      ctx.fill();
-      ctx.strokeStyle = '#222';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      // Vẽ dây tua
-      ctx.beginPath();
-      ctx.moveTo(0, 10);
-      ctx.lineTo(0, 20);
-      ctx.strokeStyle = '#222';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(0, 20, 3, 0, Math.PI * 2);
-      ctx.fillStyle = '#bfa58a';
-      ctx.fill();
-      ctx.restore();
-    }
-    function randomBetween(a, b) {
-      return a + Math.random() * (b - a);
-    }
-    function startGraduationCapAnimation() {
-      const canvas = document.getElementById('graduation-canvas');
-      if (!canvas) return;
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      const ctx = canvas.getContext('2d');
-      let caps = [];
-      for (let i = 0; i < 30; i++) {
-        caps.push({
-          x: randomBetween(0, canvas.width),
-          y: randomBetween(-canvas.height, 0),
-          size: randomBetween(28, 48),
-          speed: randomBetween(1.2, 2.8),
-          angle: randomBetween(0, Math.PI * 2),
-          rotateSpeed: randomBetween(-0.02, 0.02)
-        });
-      }
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let cap of caps) {
-          drawGraduationCap(ctx, cap.x, cap.y, cap.size, cap.angle);
-          cap.y += cap.speed;
-          cap.angle += cap.rotateSpeed;
-          if (cap.y > canvas.height + 50) {
-            cap.x = randomBetween(0, canvas.width);
-            cap.y = randomBetween(-60, -20);
-            cap.size = randomBetween(28, 48);
-            cap.speed = randomBetween(1.2, 2.8);
-            cap.angle = randomBetween(0, Math.PI * 2);
-            cap.rotateSpeed = randomBetween(-0.02, 0.02);
-          }
-        }
-        requestAnimationFrame(animate);
-      }
-      animate();
-    }
-    document.addEventListener('DOMContentLoaded', startGraduationCapAnimation);
-    window.addEventListener('resize', startGraduationCapAnimation);
+
   </script>
 </body>
 

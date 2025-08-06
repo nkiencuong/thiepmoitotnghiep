@@ -494,7 +494,7 @@ function showMobileMusicNotice() {
   }
 }
 
-// Hiệu ứng trái tim mờ mờ bay quanh màn hình
+// Hiệu ứng mũ tốt nghiệp mờ mờ bay quanh màn hình
 (function initializeHearts() {
   const canvas = document.getElementById('heart-canvas');
   if (!canvas) return;
@@ -512,27 +512,51 @@ function showMobileMusicNotice() {
   }
   window.addEventListener('resize', resize);
 
-  // Tạo trái tim bằng path
-  function drawHeart(x, y, size, alpha, rotate = 0) {
+  // Tạo mũ tốt nghiệp bằng path
+  function drawGraduationCap(x, y, size, alpha, rotate = 0) {
     ctx.save();
     ctx.globalAlpha = alpha;
     ctx.translate(x, y);
     ctx.rotate(rotate);
+    ctx.scale(size / 40, size / 40);
+    
+    // Vẽ mũ tốt nghiệp
     ctx.beginPath();
-    ctx.moveTo(0, -size/2);
-    ctx.bezierCurveTo(size/2, -size, size, 0, 0, size);
-    ctx.bezierCurveTo(-size, 0, -size/2, -size, 0, -size/2);
+    ctx.moveTo(-20, 0);
+    ctx.lineTo(0, -10);
+    ctx.lineTo(20, 0);
+    ctx.lineTo(0, 10);
     ctx.closePath();
-    ctx.fillStyle = 'rgba(255, 100, 150, 0.3)';
-    ctx.shadowColor = 'rgba(255, 100, 150, 0.2)';
+    ctx.fillStyle = 'rgba(191, 165, 138, 0.3)';
+    ctx.shadowColor = 'rgba(191, 165, 138, 0.2)';
     ctx.shadowBlur = 8;
     ctx.fill();
+    
+    // Vẽ viền mũ
+    ctx.strokeStyle = 'rgba(34, 34, 34, 0.3)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Vẽ dây tua
+    ctx.beginPath();
+    ctx.moveTo(0, 10);
+    ctx.lineTo(0, 20);
+    ctx.strokeStyle = 'rgba(34, 34, 34, 0.3)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Vẽ đầu tua
+    ctx.beginPath();
+    ctx.arc(0, 20, 3, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(191, 165, 138, 0.3)';
+    ctx.fill();
+    
     ctx.restore();
   }
 
-  // Tạo mảng trái tim
-  const heartCount = Math.max(18, Math.floor(width / 60));
-  const hearts = Array.from({length: heartCount}, () => ({
+  // Tạo mảng mũ tốt nghiệp
+  const capCount = Math.max(18, Math.floor(width / 60));
+  const caps = Array.from({length: capCount}, () => ({
     x: Math.random() * width,
     y: Math.random() * height,
     size: 18 + Math.random() * 22,
@@ -543,23 +567,23 @@ function showMobileMusicNotice() {
     rotateSpeed: (Math.random() - 0.5) * 0.003
   }));
 
-  function animateHearts() {
+  function animateCaps() {
     ctx.clearRect(0, 0, width, height);
-    for (const h of hearts) {
-      h.y -= h.speed;
-      h.x += h.drift;
-      h.rotate += h.rotateSpeed;
-      if (h.y < -h.size) {
-        h.y = height + h.size;
-        h.x = Math.random() * width;
+    for (const c of caps) {
+      c.y -= c.speed;
+      c.x += c.drift;
+      c.rotate += c.rotateSpeed;
+      if (c.y < -c.size) {
+        c.y = height + c.size;
+        c.x = Math.random() * width;
       }
-      if (h.x < -h.size) h.x = width + h.size;
-      if (h.x > width + h.size) h.x = -h.size;
-      drawHeart(h.x, h.y, h.size, h.alpha, h.rotate);
+      if (c.x < -c.size) c.x = width + c.size;
+      if (c.x > width + c.size) c.x = -c.size;
+      drawGraduationCap(c.x, c.y, c.size, c.alpha, c.rotate);
     }
-    requestAnimationFrame(animateHearts);
+    requestAnimationFrame(animateCaps);
   }
-  animateHearts();
+  animateCaps();
 })();
 
 // Initialize

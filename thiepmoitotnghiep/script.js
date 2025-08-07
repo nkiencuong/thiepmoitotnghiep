@@ -616,6 +616,9 @@ function showMobileMusicNotice() {
       } else {
         spread.style.display = 'none';
         spread.classList.remove('active');
+        // Ẩn toàn bộ trang trong spread không active
+        let pages = spread.querySelectorAll('.book-page');
+        pages.forEach(page => page.style.display = 'none');
       }
     });
     document.getElementById('prev-page').style.display = currentSpread === 0 ? 'none' : 'block';

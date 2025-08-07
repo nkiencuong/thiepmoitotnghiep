@@ -599,6 +599,20 @@ function showMobileMusicNotice() {
       if (idx === currentSpread) {
         spread.style.display = 'flex';
         spread.classList.add('active');
+        // Mobile: chỉ hiện 1 trang (left nếu có, nếu không thì right)
+        if (isMobile()) {
+          let pages = spread.querySelectorAll('.book-page');
+          pages.forEach((page, i) => {
+            if (i === 0) {
+              page.style.display = 'flex';
+            } else {
+              page.style.display = 'none';
+            }
+          });
+        } else {
+          let pages = spread.querySelectorAll('.book-page');
+          pages.forEach(page => page.style.display = 'flex');
+        }
       } else {
         spread.style.display = 'none';
         spread.classList.remove('active');
@@ -612,7 +626,6 @@ function showMobileMusicNotice() {
     const direction = idx > currentSpread ? 1 : -1;
     const current = spreads[currentSpread];
     const next = spreads[idx];
-    // Hiệu ứng lật trang
     if (current && next) {
       current.classList.add('flipping');
       current.style.transform = `rotateY(${direction * -70}deg)`;
@@ -630,6 +643,7 @@ function showMobileMusicNotice() {
           next.style.transform = '';
           next.style.opacity = '';
           next.classList.remove('flipping');
+          currentSpread = idx;
           updateBookView();
         }, 350);
       }, 350);
@@ -637,7 +651,6 @@ function showMobileMusicNotice() {
       currentSpread = idx;
       updateBookView();
     }
-    currentSpread = idx;
   }
   window.addEventListener('DOMContentLoaded', function() {
     spreads = Array.from(document.querySelectorAll('.book-spread'));
@@ -645,23 +658,7 @@ function showMobileMusicNotice() {
     document.getElementById('prev-page').onclick = function() { goToSpread(currentSpread - 1); };
     document.getElementById('next-page').onclick = function() { goToSpread(currentSpread + 1); };
     updateBookView();
-    function updateMobileBook() {
-      if (isMobile()) {
-        spreads.forEach((spread, idx) => {
-          let pages = spread.querySelectorAll('.book-page');
-          pages.forEach((page, i) => {
-            page.style.display = (i === 0 && idx === currentSpread) || (i === 1 && idx === currentSpread) ? 'flex' : 'none';
-          });
-        });
-      } else {
-        spreads.forEach((spread, idx) => {
-          let pages = spread.querySelectorAll('.book-page');
-          pages.forEach(page => page.style.display = 'flex');
-        });
-      }
-    }
-    updateMobileBook();
-    window.addEventListener('resize', updateMobileBook);
+    window.addEventListener('resize', updateBookView);
   });
 })();
 

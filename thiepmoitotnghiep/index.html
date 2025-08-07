@@ -595,6 +595,272 @@
       text-align: center;
       margin-top: 2px;
     }
+
+    /* Book Flip Layout */
+    #book-container {
+      position: relative;
+      width: 90vw;
+      max-width: 900px;
+      margin: 40px auto 0 auto;
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 10;
+    }
+    .book-spread {
+      display: flex;
+      width: 100%;
+      min-height: 60vh;
+      justify-content: center;
+      align-items: stretch;
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.35s cubic-bezier(0.4,0,0.2,1);
+      will-change: transform, opacity;
+      backface-visibility: hidden;
+      perspective: 1200px;
+    }
+    .book-spread.flipping {
+      z-index: 20;
+    }
+    .book-spread.active {
+      z-index: 21;
+    }
+    .book-page {
+      flex: 1 1 0;
+      background: #fffdfa;
+      margin: 8px;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(191,165,138,0.10), 0 1.5px 0 #bfa58a;
+      padding: 32px 18px 32px 18px;
+      min-width: 0;
+      min-height: 350px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      position: relative;
+      overflow: visible;
+      background: #fffdfa;
+      /* Xóa border cứng, thêm padding lớn hơn để lộ viền */
+      padding: 40px 24px 40px 24px;
+      box-shadow: 0 4px 24px rgba(191,165,138,0.10), 0 1.5px 0 #bfa58a;
+      /* Thêm border-image SVG uốn lượn */
+      border: 8px solid transparent;
+      border-image: url('data:image/svg+xml;utf8,<svg width="100%25" height="100%25" viewBox="0 0 400 600" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20,40 Q40,10 80,30 T160,40 T240,30 T320,40 Q360,10 380,40 L380,560 Q360,590 320,570 T240,560 T160,570 T80,560 Q40,590 20,560 Z" stroke="%23bfa58a" stroke-width="12" fill="none"/></svg>') 20 stretch;
+      border-radius: 36px;
+      /* Đổ bóng nhẹ hơn */
+      box-shadow: 0 6px 32px rgba(191,165,138,0.13), 0 1.5px 0 #bfa58a;
+    }
+    .book-page:before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      border-radius: 36px;
+      /* Overlay SVG viền gió mềm mại */
+      background: url('data:image/svg+xml;utf8,<svg width="100%25" height="100%25" viewBox="0 0 400 600" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20,40 Q40,10 80,30 T160,40 T240,30 T320,40 Q360,10 380,40 L380,560 Q360,590 320,570 T240,560 T160,570 T80,560 Q40,590 20,560 Z" stroke="%23bfa58a" stroke-width="8" fill="none"/></svg>') center/cover no-repeat;
+      opacity: 0.7;
+    }
+    .book-page > * { position: relative; z-index: 2; }
+    .book-page.left {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-right: 2px solid #f3e7d7;
+    }
+    .book-page.right {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-left: 2px solid #f3e7d7;
+    }
+    .book-page.cover-page {
+      background: linear-gradient(135deg, #f7d9d9 60%, #fffdfa 100%);
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .book-page.empty-page {
+      background: none;
+      box-shadow: none;
+    }
+    .book-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #bfa58a;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 20;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      transition: background 0.2s;
+      opacity: 0.85;
+    }
+    #prev-page { left: -24px; }
+    #next-page { right: -24px; }
+    .book-nav:active { background: #a88c6b; }
+    @media (max-width: 900px) {
+      #book-container { width: 99vw; }
+    }
+    @media (max-width: 768px) {
+      .book-spread {
+        flex-direction: column;
+        min-height: 0;
+        transition: transform 0.35s, opacity 0.35s;
+      }
+      .book-page {
+        min-height: 220px;
+        margin: 6px 0;
+        border-radius: 16px !important;
+        border: none !important;
+        width: 98vw;
+        max-width: 99vw;
+        padding: 18px 6vw 18px 6vw;
+      }
+      .book-page.left, .book-page.right {
+        border: none;
+      }
+      #prev-page, #next-page {
+        top: unset;
+        bottom: -32px;
+        left: 30%;
+        right: unset;
+        transform: none;
+        margin: 0 8vw;
+        width: 44px;
+        height: 44px;
+        font-size: 1.6rem;
+      }
+      #next-page { left: unset; right: 30%; }
+    }
+    .book-page.invitation-page, .book-page.wish-page, .book-page.parking-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      padding: 40px 24px 40px 24px;
+    }
+    .invitation-header {
+      margin-bottom: 18px;
+      width: 100%;
+      text-align: center;
+    }
+    .invitation-col {
+      margin: 0 auto 18px auto;
+      background: rgba(255,255,255,0.92);
+      border-radius: 12px;
+      padding: 18px 20px 12px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      max-width: 400px;
+      width: 100%;
+      text-align: left;
+    }
+    .countdown-box {
+      margin: 18px auto 0 auto;
+      justify-content: center;
+    }
+    .calendar-container {
+      margin: 24px auto 0 auto;
+      max-width: 370px;
+    }
+    .book-page.wish-page form {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .book-page.parking-page h2 {
+      margin-bottom: 18px;
+      width: 100%;
+      text-align: center;
+    }
+    .book-page.parking-page .invitation-col {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+    @media (max-width: 768px) {
+      .book-page.invitation-page, .book-page.wish-page, .book-page.parking-page {
+        padding: 18px 6vw 18px 6vw;
+      }
+      .invitation-col, .calendar-container, .book-page.wish-page form {
+        max-width: 98vw;
+        width: 98vw;
+      }
+    }
+    .book-page.cover-page, .book-page.invitation-page, .book-page.wish-page, .book-page.parking-page, .book-page.thankyou-page {
+      min-height: 480px;
+      padding: 56px 40px 56px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 1.25rem;
+    }
+    .book-page.cover-page h1 {
+      font-size: 3.8rem;
+      margin-bottom: 32px;
+    }
+    .book-page.invitation-page h2 {
+      font-size: 2.4rem;
+      margin-bottom: 18px;
+    }
+    .book-page.invitation-page .invitation-col {
+      font-size: 1.18rem;
+      padding: 24px 28px 18px 28px;
+      margin-bottom: 18px;
+      max-width: 520px;
+    }
+    .book-page .countdown-box {
+      margin: 24px auto 0 auto;
+      font-size: 1.1rem;
+    }
+    .book-page .calendar-container {
+      margin: 32px auto 0 auto;
+      max-width: 420px;
+    }
+    .book-page.wish-page form {
+      max-width: 520px;
+      padding: 0 12px;
+    }
+    .book-page.parking-page .invitation-col {
+      max-width: 520px;
+      padding: 24px 28px 18px 28px;
+    }
+    .book-page.thankyou-page h2 {
+      font-size: 2.8rem;
+      margin-bottom: 0;
+    }
+    @media (max-width: 900px) {
+      .book-page.cover-page, .book-page.invitation-page, .book-page.wish-page, .book-page.parking-page, .book-page.thankyou-page {
+        min-height: 320px;
+        padding: 24px 6vw 24px 6vw;
+        font-size: 1.08rem;
+      }
+      .book-page.cover-page h1 {
+        font-size: 2.2rem;
+      }
+      .book-page.invitation-page h2 {
+        font-size: 1.5rem;
+      }
+      .book-page.invitation-page .invitation-col, .book-page.parking-page .invitation-col {
+        max-width: 98vw;
+        padding: 14px 4vw 10px 4vw;
+      }
+      .book-page .calendar-container {
+        max-width: 98vw;
+      }
+      .book-page.wish-page form {
+        max-width: 98vw;
+      }
+    }
   </style>
 </head>
 
@@ -615,183 +881,110 @@
     </div>
   </div>
 
-  <section id="intro" class="section">
-    <div class="content-box">
-      <h1 class="neon-3d">Lễ Tốt Nghiệp Của Kiên Cường</h1>
-      <p>Chào mừng bạn đến với lễ tốt nghiệp!<br>Khoảnh khắc đặc biệt này sẽ ý nghĩa hơn khi có sự hiện diện của bạn</p>
-    </div>
-  </section>
-
-  <section id="invitation" class="section">
-    <div class="content-box">
-      <div class="invitation-header" style="margin-bottom: 18px;">
-        <h2
-          style="font-family: 'Great Vibes', cursive; font-size:2.6rem; color:#000; font-weight:bold; margin-bottom: 0; text-align:center;">
-          <span style="font-size:1.3em; vertical-align:middle;">💌</span> Thân Mời</h2>
-        <div style="font-family: 'Time New Roman', serif; color:#222; font-size:1.18rem; text-align:center; margin-top: 2px;">
-          Gia đình, anh em , bạn bè <span>🥋❤️</span><br>
-          Đến tham dự lễ tốt nghiệp của <b style="font-weight:700; color:#222;">Kiên Cường</b>
-        </div>
+  <div id="book-container">
+    <div class="book-spread" data-spread="0">
+      <div class="book-page left cover-page">
+        <h1 class="neon-3d">Lễ Tốt Nghiệp<br>Kiên Cường</h1>
+        <p style="margin-top:2em;">Chào mừng bạn đến với lễ tốt nghiệp!<br>Khoảnh khắc đặc biệt này sẽ ý nghĩa hơn khi có sự hiện diện của bạn</p>
       </div>
-      <div class="invitation-flex" style="justify-content: center;">
-        <div class="invitation-col" style="max-width: 400px; border-radius: 12px;">
+      <div class="book-page right invitation-page">
+        <div class="invitation-header">
+          <h2><span style="font-size:1.3em; vertical-align:middle;">💌</span> Thân Mời</h2>
+          <div>Gia đình, anh em, bạn bè <span>🥋❤️</span><br>Đến tham dự lễ tốt nghiệp của <b>Kiên Cường</b></div>
+        </div>
+        <div class="invitation-col">
           <h2>Buổi sáng</h2>
           <p><strong>Thời gian:</strong> 8:00 AM, Ngày 16/08/2025</p>
           <p><strong>Địa điểm:</strong> 218 Đ. Lĩnh Nam, Vĩnh Hưng, Hoàng Mai, Hà Nội, Việt Nam</p>
         </div>
-      </div>
-      <div class="countdown-box" id="countdown">
-        <div class="flip-card" id="flip-days">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">00</div>
-            <div class="flip-card-back">00</div>
+        <div class="countdown-box" id="countdown">
+          <div class="flip-card" id="flip-days">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">00</div>
+              <div class="flip-card-back">00</div>
+            </div>
+            <p>Days</p>
           </div>
-          <p>Days</p>
-        </div>
-        <div class="flip-card" id="flip-hours">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">00</div>
-            <div class="flip-card-back">00</div>
+          <div class="flip-card" id="flip-hours">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">00</div>
+              <div class="flip-card-back">00</div>
+            </div>
+            <p>Hours</p>
           </div>
-          <p>Hours</p>
-        </div>
-        <div class="flip-card" id="flip-minutes">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">00</div>
-            <div class="flip-card-back">00</div>
+          <div class="flip-card" id="flip-minutes">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">00</div>
+              <div class="flip-card-back">00</div>
+            </div>
+            <p>Minutes</p>
           </div>
-          <p>Minutes</p>
-        </div>
-        <div class="flip-card" id="flip-seconds">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">00</div>
-            <div class="flip-card-back">00</div>
+          <div class="flip-card" id="flip-seconds">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">00</div>
+              <div class="flip-card-back">00</div>
+            </div>
+            <p>Seconds</p>
           </div>
-          <p>Seconds</p>
         </div>
-      </div>
-      <!-- Calendar for August 2025 -->
-      <div class="calendar-container">
-        <div class="calendar-title">Tháng 8</div>
-        <table class="calendar-table">
-          <thead>
-            <tr>
-              <th>MON</th>
-              <th>TUE</th>
-              <th>WED</th>
-              <th>THUR</th>
-              <th>FRI</th>
-              <th>SAT</th>
-              <th>SUN</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>1</td>
-              <td>2</td>
-              <td>3</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>5</td>
-              <td>6</td>
-              <td>7</td>
-              <td>8</td>
-              <td>9</td>
-              <td>10</td>
-            </tr>
-            <tr>
-              <td>11</td>
-              <td>12</td>
-              <td>13</td>
-              <td>14</td>
-              <td>15</td>
-              <td class="heart-day">16
-                <div class="calendar-heart">
-                  <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M16 28s-9.5-7.5-9.5-13.5A6.5 6.5 0 0 1 16 8a6.5 6.5 0 0 1 9.5 6.5C25.5 20.5 16 28 16 28z"
-                      stroke="#bfa58a" stroke-width="2.2" fill="none" />
-                  </svg>
-                </div>
-              </td>
-              <td>17</td>
-            </tr>
-            <tr>
-              <td>18</td>
-              <td>19</td>
-              <td>20</td>
-              <td>21</td>
-              <td>22</td>
-              <td>23</td>
-              <td>24</td>
-            </tr>
-            <tr>
-              <td>25</td>
-              <td>26</td>
-              <td>27</td>
-              <td>28</td>
-              <td>29</td>
-              <td>30</td>
-              <td>31</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="calendar-container">
+          <!-- Lịch giữ nguyên như cũ -->
+          <div class="calendar-title">Tháng 8</div>
+          <table class="calendar-table">
+            <thead>
+              <tr>
+                <th>MON</th><th>TUE</th><th>WED</th><th>THUR</th><th>FRI</th><th>SAT</th><th>SUN</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td></td><td></td><td></td><td></td><td>1</td><td>2</td><td>3</td></tr>
+              <tr><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr>
+              <tr><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td class="heart-day">16<div class="calendar-heart"><svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 28s-9.5-7.5-9.5-13.5A6.5 6.5 0 0 1 16 8a6.5 6.5 0 0 1 9.5 6.5C25.5 20.5 16 28 16 28z" stroke="#bfa58a" stroke-width="2.2" fill="none" /></svg></div></td><td>17</td></tr>
+              <tr><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td></tr>
+              <tr><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </section>
-
-  <section id="loi-chuc" class="section">
-    <div class="content-box">
-      <h2 style="font-family:'Great Vibes',cursive;font-size:2.3rem;color:#bfa58a;margin-bottom:18px;">Gửi lời chúc tới Kiên Cường</h2>
-      <form id="messageForm" style="margin-top:12px; display:flex; flex-direction:column; gap:18px; align-items:center;">
-        <input type="text" id="name" name="name" placeholder="Tên của bạn" style="width:80%; max-width:400px; padding:12px; border-radius:32px; border:1px solid #bfa58a; font-size:1.1rem; outline:none; background:#fff; color:#222; font-family:'Roboto',sans-serif;">
-        <textarea id="message" name="message" placeholder="Lời nhắn của bạn" rows="3" style="width:80%; max-width:400px; padding:12px; border-radius:32px; border:1px solid #bfa58a; font-size:1.1rem; outline:none; background:#fff; color:#222; font-family:'Roboto',sans-serif;"></textarea>
-        <button type="submit" style="width:80%; max-width:400px; padding:12px; border-radius:32px; border:none; background:#ede3df; color:#bfa58a; font-size:1.2rem; font-family:'Roboto',sans-serif; font-weight:500; letter-spacing:2px; cursor:pointer;">GỬI LỜI CHÚC</button>
-        <div id="formStatus" style="margin-top:8px; color:#bfa58a; font-size:1.05rem;"></div>
-      </form>
-    </div>
-  </section>
-
-  <section id="parking" class="section">
-    <div class="content-box">
-      <h2>Hướng Dẫn Gửi Xe</h2>
-      <div class="invitation-flex" style="margin-bottom: 32px; justify-content: center;">
-        <div class="invitation-col" style="max-width: 400px; border-radius: 12px;">
-  
+    <div class="book-spread" data-spread="1">
+      <div class="book-page left wish-page">
+        <h2 style="font-family:'Great Vibes',cursive;font-size:2.3rem;color:#bfa58a;margin-bottom:18px;">Gửi lời chúc tới Kiên Cường</h2>
+        <form id="messageForm" style="margin-top:12px; display:flex; flex-direction:column; gap:18px; align-items:center;">
+          <input type="text" id="name" name="name" placeholder="Tên của bạn" style="width:80%; max-width:400px; padding:12px; border-radius:32px; border:1px solid #bfa58a; font-size:1.1rem; outline:none; background:#fff; color:#222; font-family:'Roboto',sans-serif;">
+          <textarea id="message" name="message" placeholder="Lời nhắn của bạn" rows="3" style="width:80%; max-width:400px; padding:12px; border-radius:32px; border:1px solid #bfa58a; font-size:1.1rem; outline:none; background:#fff; color:#222; font-family:'Roboto',sans-serif;"></textarea>
+          <button type="submit" style="width:80%; max-width:400px; padding:12px; border-radius:32px; border:none; background:#ede3df; color:#bfa58a; font-size:1.2rem; font-family:'Roboto',sans-serif; font-weight:500; letter-spacing:2px; cursor:pointer;">GỬI LỜI CHÚC</button>
+          <div id="formStatus" style="margin-top:8px; color:#bfa58a; font-size:1.05rem;"></div>
+        </form>
+      </div>
+      <div class="book-page right parking-page">
+        <h2>Hướng Dẫn Gửi Xe</h2>
+        <div class="invitation-col">
           <p><strong>Gửi xe tại:</strong> Tại hầm gửi xe cổng C2, 218 Lĩnh Nam, Hoàng Mai, Hà Nội</p>
         </div>
-      </div>
-      
-      <div style="margin: 24px 0; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.427013712332!2d105.872222!3d20.980556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ae0e7e2e7e2b%3A0x2e7e2e7e2e7e2e7e!2zMjE4IEzDqiBOaOG6rW0sIFZpbmggSHVuZywgSG_DoG5nIE1haSwgSMOgIE7hu5lpLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1722952000000!5m2!1svi!2s"
-          width="100%" height="320" style="border:0; min-width:250px;" allowfullscreen="" loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
-      <div style="text-align: center; margin-top: 16px;">
-        <a href="https://maps.app.goo.gl/rzvKeiaZc47x3Koj7" target="_blank" style="display: inline-block; background: #bfa58a; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: background 0.3s;">
-          <i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i>
-          Xem trên Google Maps
-        </a>
+        <div style="margin: 24px 0; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.427013712332!2d105.872222!3d20.980556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ae0e7e2e7e2b%3A0x2e7e2e7e2e7e2e7e!2zMjE4IEzDqiBOaOG6rW0sIFZpbmggSHVuZywgSG_DoG5nIE1haSwgSMOgIE7hu5lpLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1722952000000!5m2!1svi!2s" width="100%" height="180" style="border:0; min-width:150px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div style="text-align: center; margin-top: 16px;">
+          <a href="https://maps.app.goo.gl/rzvKeiaZc47x3Koj7" target="_blank" style="display: inline-block; background: #bfa58a; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: background 0.3s;">
+            <i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i>
+            Xem trên Google Maps
+          </a>
+        </div>
       </div>
     </div>
-  </section>
-
-
-  <section id="thank-you" class="section" style="background:#fff;">
-    <div class="content-box" style="background:#fff; box-shadow:none;">
-      <h2 style="font-size:2.8rem; color:#bfa58a; font-family:'Great Vibes',cursive; margin-bottom:0; display:flex; align-items:center; justify-content:center; gap:12px;">
-        <span style="font-size:2.2rem; vertical-align:middle;">
-          <i class="fas fa-graduation-cap"></i>
-        </span>
-        Thank you!🎉👨‍🎓
-      </h2>
+    <div class="book-spread" data-spread="2">
+      <div class="book-page left thankyou-page" style="justify-content:center;align-items:center;">
+        <h2 style="font-size:2.8rem; color:#bfa58a; font-family:'Great Vibes',cursive; margin-bottom:0; display:flex; align-items:center; justify-content:center; gap:12px;">
+          <span style="font-size:2.2rem; vertical-align:middle;"><i class="fas fa-graduation-cap"></i></span>
+          Thank you!🎉👨‍🎓
+        </h2>
+      </div>
+      <div class="book-page right empty-page"></div>
     </div>
-  </section>
+    <button id="prev-page" class="book-nav">&#8592;</button>
+    <button id="next-page" class="book-nav">&#8594;</button>
+  </div>
 
   <div id="lightbox" onclick="closeLightbox()">
     <img id="lightbox-img" src="">

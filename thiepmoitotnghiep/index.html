@@ -718,19 +718,36 @@
         min-height: 0;
         width: 100vw;
         max-width: 100vw;
+        min-width: 0;
         padding: 0;
+        position: relative;
+      }
+      .book-spread:not(.active) {
+        display: none !important;
       }
       .book-page {
-        width: 100vw;
-        max-width: 100vw;
-        min-width: 0;
-        margin: 0;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        min-width: 0 !important;
+        margin: 0 !important;
         border-radius: 0 !important;
-        padding: 18px 2vw 18px 2vw;
-        box-sizing: border-box;
+        padding: 18px 2vw 18px 2vw !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+        position: relative;
+        left: 0;
+        right: 0;
+        top: 0;
+      }
+      .book-page > * {
+        max-width: 98vw !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
       }
       .book-page.left, .book-page.right {
-        border: none;
+        border: none !important;
       }
       .book-nav {
         position: fixed;
@@ -750,6 +767,24 @@
       #next-page {
         left: unset;
         right: 16px;
+      }
+      #heart-music-btn {
+        z-index: 10002 !important;
+      }
+      /* Đảm bảo các box, form, calendar, countdown không bị tràn */
+      .invitation-col, .calendar-container, .countdown-box, form, .content-box {
+        max-width: 98vw !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+      h1, h2, h3, p, label, input, textarea, button {
+        max-width: 98vw !important;
+        word-break: break-word;
+        overflow-wrap: break-word;
       }
     }
     .book-page.invitation-page, .book-page.wish-page, .book-page.parking-page {

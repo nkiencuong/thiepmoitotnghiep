@@ -586,6 +586,85 @@ function showMobileMusicNotice() {
   animateCaps();
 })();
 
+// Book Flip Logic
+(function() {
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+  let currentSpread = 0;
+  let totalSpreads = 0;
+  let spreads = [];
+  function updateBookView() {
+    spreads.forEach((spread, idx) => {
+      if (idx === currentSpread) {
+        spread.style.display = 'flex';
+        spread.classList.add('active');
+      } else {
+        spread.style.display = 'none';
+        spread.classList.remove('active');
+      }
+    });
+    document.getElementById('prev-page').style.display = currentSpread === 0 ? 'none' : 'block';
+    document.getElementById('next-page').style.display = currentSpread === totalSpreads - 1 ? 'none' : 'block';
+  }
+  function goToSpread(idx) {
+    if (idx < 0 || idx >= totalSpreads) return;
+    const direction = idx > currentSpread ? 1 : -1;
+    const current = spreads[currentSpread];
+    const next = spreads[idx];
+    // Hiệu ứng lật trang
+    if (current && next) {
+      current.classList.add('flipping');
+      current.style.transform = `rotateY(${direction * -70}deg)`;
+      current.style.opacity = '0.2';
+      setTimeout(() => {
+        current.classList.remove('flipping');
+        current.style.transform = '';
+        current.style.opacity = '';
+        current.style.display = 'none';
+        next.style.display = 'flex';
+        next.classList.add('flipping');
+        next.style.transform = `rotateY(${direction * 70}deg)`;
+        next.style.opacity = '0.2';
+        setTimeout(() => {
+          next.style.transform = '';
+          next.style.opacity = '';
+          next.classList.remove('flipping');
+          updateBookView();
+        }, 350);
+      }, 350);
+    } else {
+      currentSpread = idx;
+      updateBookView();
+    }
+    currentSpread = idx;
+  }
+  window.addEventListener('DOMContentLoaded', function() {
+    spreads = Array.from(document.querySelectorAll('.book-spread'));
+    totalSpreads = spreads.length;
+    document.getElementById('prev-page').onclick = function() { goToSpread(currentSpread - 1); };
+    document.getElementById('next-page').onclick = function() { goToSpread(currentSpread + 1); };
+    updateBookView();
+    function updateMobileBook() {
+      if (isMobile()) {
+        spreads.forEach((spread, idx) => {
+          let pages = spread.querySelectorAll('.book-page');
+          pages.forEach((page, i) => {
+            page.style.display = (i === 0 && idx === currentSpread) || (i === 1 && idx === currentSpread) ? 'flex' : 'none';
+          });
+        });
+      } else {
+        spreads.forEach((spread, idx) => {
+          let pages = spread.querySelectorAll('.book-page');
+          pages.forEach(page => page.style.display = 'flex');
+        });
+      }
+    }
+    updateMobileBook();
+    window.addEventListener('resize', updateMobileBook);
+  });
+})();
+
 // Initialize
 window.onload = function() {
   try {

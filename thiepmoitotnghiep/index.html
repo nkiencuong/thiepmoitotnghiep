@@ -219,8 +219,9 @@
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
-      background: #ffd700;
-      color: #333;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(191, 165, 138, 0.3);
+      color: #222;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -228,6 +229,7 @@
       font-weight: bold;
       border-radius: 10px;
       font-family: 'Times New Roman', Times, serif;
+      backdrop-filter: blur(10px);
     }
 
     .flip-card-back {
@@ -389,7 +391,67 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    #heart-music-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 16px rgba(229, 57, 53, 0.3);
+    }
+
+    #heart-music-btn:active {
+      transform: scale(0.95);
+    }
+
+    #heart-music-btn.clicked {
+      animation: heartBurst 0.6s ease-out;
+    }
+
+    @keyframes heartBurst {
+      0% {
+        transform: scale(1);
+      }
+      20% {
+        transform: scale(1.3) rotate(10deg);
+        box-shadow: 0 0 20px rgba(229, 57, 53, 0.8);
+      }
+      40% {
+        transform: scale(0.9) rotate(-5deg);
+      }
+      60% {
+        transform: scale(1.1) rotate(3deg);
+      }
+      80% {
+        transform: scale(0.95) rotate(-1deg);
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+      }
+    }
+
+    /* Heart particles */
+    .heart-particle {
+      position: fixed;
+      font-size: 1.2rem;
+      color: #e53935;
+      pointer-events: none;
+      z-index: 9999;
+      animation: heartParticle 1.5s ease-out forwards;
+    }
+
+    @keyframes heartParticle {
+      0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 1;
+      }
+      20% {
+        transform: scale(1.2) rotate(45deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0.3) rotate(180deg) translateY(-100px);
+        opacity: 0;
+      }
     }
 
     .gallery-anim {
@@ -595,6 +657,126 @@
       text-align: center;
       margin-top: 2px;
     }
+
+    /* Time Card Styles */
+    .time-card {
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid #bfa58a;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .time-header {
+      margin-bottom: 15px;
+    }
+
+    .time-label {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 1.2rem;
+      color: #222;
+      font-weight: bold;
+    }
+
+    .time-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .time-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+
+    .time-dots {
+      font-family: 'Times New Roman', Times, serif;
+      color: #bfa58a;
+      font-size: 1.4rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .time-text {
+      font-family: 'Times New Roman', Times, serif;
+      color: #222;
+      font-size: 1rem;
+      font-weight: bold;
+      min-width: 30px;
+    }
+
+    .time-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin: 10px 0;
+      border-top: 1px solid #bfa58a;
+      border-bottom: 1px solid #bfa58a;
+      padding: 12px 0;
+    }
+
+    .day-label {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 1rem;
+      color: #222;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .date-number {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 2.5rem;
+      color: #222;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .month-year {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 1rem;
+      color: #222;
+      font-weight: bold;
+    }
+
+    .time-detail {
+      margin-top: 8px;
+    }
+
+    .hour {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 1.4rem;
+      color: #bfa58a;
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .time-card {
+        padding: 15px;
+        margin: 15px 0;
+      }
+      
+      .time-main {
+        gap: 10px;
+      }
+      
+      .date-number {
+        font-size: 2rem;
+      }
+      
+      .time-dots {
+        font-size: 1.2rem;
+        font-weight: bold;
+        letter-spacing: 1px;
+      }
+    }
   </style>
 </head>
 
@@ -628,16 +810,37 @@
         <h2
           style="font-family: 'Great Vibes', cursive; font-size:2.6rem; color:#000; font-weight:bold; margin-bottom: 0; text-align:center;">
           <span style="font-size:1.3em; vertical-align:middle;">💌</span> Thân Mời</h2>
-        <div style="font-family: 'Time New Roman', serif; color:#222; font-size:1.18rem; text-align:center; margin-top: 2px;">
+        <div style="font-family: 'Time New Roman', serif; color:#222; font-size:2rem; text-align:center; margin-top: 2px;">
           Gia đình, anh em , bạn bè <span>🥋❤️</span><br>
-          Đến tham dự lễ tốt nghiệp của <b style="font-weight:700; color:#222;">Kiên Cường</b>
+          Đến tham dự lễ tốt nghiệp của
+          <p></p> <b style="font-weight:700; color:#222;">Kiên Cường</b>
         </div>
       </div>
       <div class="invitation-flex" style="justify-content: center;">
-        <div class="invitation-col" style="max-width: 400px; border-radius: 12px;">
-          <h2>Buổi sáng</h2>
-          <p><strong>Thời gian:</strong> 8:00 AM, Ngày 16/08/2025</p>
-          <p><strong>Địa điểm:</strong> 218 Đ. Lĩnh Nam, Vĩnh Hưng, Hoàng Mai, Hà Nội, Việt Nam</p>
+        <div class="invitation-col" style="max-width: 500px; border-radius: 12px;">
+
+          
+          <!-- Thiết kế thời gian theo kiểu thiệp -->
+          <div class="time-card">
+            <div class="time-header">
+              <span class="time-label">Thời gian:</span>
+            </div>
+            <div class="time-content">
+              <div class="time-row">
+                <span class="time-dots">8 Giờ </span>
+                <!-- <span class="time-text">8h30</span> -->
+                <span class="time-dots">30 Phút</span>
+              </div>
+              <div class="time-main">
+                <span class="day-label">THỨ 7</span>
+                <span class="date-number">16</span>
+                <span class="month-year">08 - 2025</span>
+              </div>
+              
+            </div>
+          </div>
+          
+          <p style="font-size: 1.3rem;"><strong>Địa điểm:</strong> 218 Đ. Lĩnh Nam, Vĩnh Hưng, Hoàng Mai, Hà Nội, Việt Nam</p>
         </div>
       </div>
       <div class="countdown-box" id="countdown">
@@ -762,7 +965,7 @@
       <div class="invitation-flex" style="margin-bottom: 32px; justify-content: center;">
         <div class="invitation-col" style="max-width: 400px; border-radius: 12px;">
   
-          <p><strong>Gửi xe tại:</strong> Tại hầm gửi xe cổng C2, 218 Lĩnh Nam, Hoàng Mai, Hà Nội</p>
+          <p style="font-size: 1.5rem;"><strong>Gửi xe tại:</strong> Tại hầm gửi xe cổng C2, 218 Lĩnh Nam, Hoàng Mai, Hà Nội</p>
         </div>
       </div>
       
